@@ -51,6 +51,7 @@ public class UserController : ControllerBase
     // Method: POST
     // Create a new user.
     [HttpPost]
+    [Route("register")]
     public async Task<ActionResult<User>> PostUser(User user)
     {
       // Add the user to the Users DbSet.

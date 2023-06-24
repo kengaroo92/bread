@@ -3,8 +3,12 @@
 public class User
 {
     // Build the constructor to initialize the object of the class. Avoids null reference warnings.
-    public User(string firstName, string lastName, string email, string password)
+    public User(string userName, string firstName, string lastName, string email, string password)
     {
+        if (string.IsNullOrEmpty(userName))
+        {
+            throw new ArgumentException("UserName cannot be null or empty. Please provide a value.", nameof(userName));
+        }
         if (string.IsNullOrEmpty(firstName))
         {
             throw new ArgumentException("First name cannot be null or empty. Please provide a value.", nameof(firstName));
@@ -21,6 +25,7 @@ public class User
         {
             throw new ArgumentException("Password cannot be null or empty. Please provide a value.", nameof(password));
         }
+        UserName = userName;
         FirstName = firstName;
         LastName = lastName;
         Email = email; // TODO: Email Format Validation: Need to manage validation for email format either in the backend or frontend. Backend would cause extra requests to handle this, will evaluate when the form in the frontend is built.
@@ -31,6 +36,7 @@ public class User
 
     // Each property in this class will represent a column in the respective table.
     public int Id { get; set; }
+    public string UserName { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string FullName { get; set; }
