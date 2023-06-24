@@ -63,6 +63,29 @@ public class UserController : ControllerBase
       return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
     }
 
+    // Route: /User/Login
+    // Method: POST
+    // Allow a user to login.
+    [HttpPost]
+    [Route("login")]
+    public async Task<ActionResult<User>> LoginUser(LoginRequest loginRequest)
+    {
+      // Take the UserName from the LoginRequest that is sent from the frontend object. Query the _context.Users DbSet, which represents Users table in the database.
+      var user = await _context.Users.Where(u => u.UserName == loginRequest.UserName).FirstOrDefaultAsync();
+
+      if (user == null)
+      {
+        return NotFound();
+      }
+      // Check if the password from the LoginRequest matches the password in the Users DbSet for the matched UserName.
+      if (user.Password != loginRequest.Password)
+      {
+        return Unauthorized();
+      }
+      // If a UserName was found and the passwords match, return the user object, allowing the user to successfully login.
+      return user;
+    }
+
     // Route: /User/{id}
     // Method: PUT
     // Update a specific user.
