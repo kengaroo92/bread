@@ -1,3 +1,5 @@
+/* Global styles that apply to the entire application. Include resets, normalization, or any style you want to apply to all parts of the app.
+   This is where the settings to provide consistency across browsers will be located. */
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

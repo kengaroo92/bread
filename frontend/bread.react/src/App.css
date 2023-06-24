@@ -1,3 +1,6 @@
+/* Style the App component. This is the top-level component. Affects child components.
+   To keep stay consistent and keep code clean, to style each individual component, create a .css file for each individual component.
+   Only make adjustments to the top-level component in here. Separation of concern is key. Keep it simple, stupid. */
 .App {
   text-align: center;
 }
