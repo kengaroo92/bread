@@ -52,8 +52,11 @@ public class UserController : ControllerBase
     // Create a new user.
     [HttpPost]
     [Route("register")]
-    public async Task<ActionResult<User>> PostUser(User user)
+    // [FromBody] tells ASP.NET to look for the data in the body of the HTTP request. Then it deserializes the JSON object found there into the RegisterRequest object.
+    public async Task<ActionResult<User>> PostUser([FromBody]RegistrationRequest registrationRequest)
     {
+      var user = new User(registrationRequest.UserName, registrationRequest.FirstName, registrationRequest.LastName, registrationRequest.Email);
+      user.SetPassword(registrationRequest.Password);
       // Add the user to the Users DbSet.
       _context.Users.Add(user);
       // Save changes to the database.
@@ -78,7 +81,7 @@ public class UserController : ControllerBase
         return NotFound();
       }
       // Check if the password from the LoginRequest matches the password in the Users DbSet for the matched UserName.
-      if (user.Password != loginRequest.Password)
+      if (!user.VerifyPassword(loginRequest.Password))
       {
         return Unauthorized();
       }
