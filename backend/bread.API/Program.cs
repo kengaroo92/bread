@@ -1,8 +1,8 @@
 #nullable disable
 
 using Microsoft.AspNetCore.Builder; // WebApplication
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection; // Controllers
+using Microsoft.EntityFrameworkCore; // UseNpgsql
+using Microsoft.Extensions.DependencyInjection; // AddControllers, AddEndpointsApiExplorer, AddSwaggerGen
 using Microsoft.Extensions.Hosting; // IsDevelopment
 
 // Create a new instance of WebApplication. Builder object that allows you to configure your application. 

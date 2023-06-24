@@ -128,6 +128,8 @@ public class UserController : ControllerBase
     private bool UserExists(int id)
     {
       // Return true if any user in the Users DbSet has the passed in ID.
+      // Lambda expression, a concise way to define an anonymous function. Reads as "e goes to e.Id equals id" or "e maps to e.Id equals id" or "for each e, e.Id is compared to id".
+      // Defines a condition to search for a user with a specific Id in the database.
       return _context.Users.Any(e => e.Id == id);
     }
 }
