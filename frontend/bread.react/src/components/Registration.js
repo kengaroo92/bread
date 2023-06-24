@@ -1,6 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { UserContext } from '../UserContext';
+import { useNavigate } from 'react-router-dom';
 
 const Registration = () => {
+  const navigate = useNavigate();
+  // Get setUser function from UserContext
+  const { setUser } = useContext(UserContext);
+
   const [formData, setFormData] = useState({
     username: '',
     firstname: '',
@@ -11,8 +17,10 @@ const Registration = () => {
 
   const handleChange = (e) => {
     setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+      ...formData, // ... is a spread operator. It builds a new object containing all of the existing key-value pairs in the formData object.
+      [e.target.name]: e.target.value, // This part adds a new key-value pair to the new object, or updates the value of an existing key.
+      // Simple terms, the original formData has key-value pairs with empty values. When the end user adds a username, a new object is created, updating the original username (key) value.
+      // This is a common way in React to update the state of an object based on the old state.
     });
   };
 
@@ -32,6 +40,16 @@ const Registration = () => {
         }
       );
       const data = await response.json(); // The API will return a response as JSON, so we will need to parse the response into a native JavaScript object.
+
+      setUser({
+        fullname: `${formData.firstname} ${formData.lastname}`,
+        username: formData.username,
+        email: formData.email,
+      });
+
+      if (response.ok) {
+        navigate('/registrationsuccess');
+      }
     } catch (error) {
       console.error(error); // Catch any errors returned by the API. Fetch doesn't properly handle HTTP responses, it can be confusing. It only rejects the Promise on network failures, so you won't see HTTP status codes 404 or 500 for example.
       // TODO: Add in logic or an external library like Axios, to handle API calls to allow for better error handling.
