@@ -12,14 +12,14 @@ public class CategoryController : ControllerBase
         _context = context;
     }
 
-    // GET: api/Category
+    // GET: /Category
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
     {
         return await _context.Categories.ToListAsync();
     }
 
-    // GET: api/Category/5
+    // GET: /Category/5
     [HttpGet("{id}")]
     public async Task<ActionResult<Category>> GetCategory(int id)
     {

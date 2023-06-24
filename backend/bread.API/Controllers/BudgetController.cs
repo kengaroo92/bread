@@ -12,14 +12,14 @@ public class BudgetController : ControllerBase
         _context = context;
     }
 
-    // GET: api/Budget
+    // GET: /Budget
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Budget>>> GetBudgets()
     {
         return await _context.Budgets.ToListAsync();
     }
 
-    // GET: api/Budget/5
+    // GET: /Budget/5
     [HttpGet("{id}")]
     public async Task<ActionResult<Budget>> GetBudget(int id)
     {
