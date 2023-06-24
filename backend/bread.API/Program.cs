@@ -1,4 +1,7 @@
+#nullable disable
+
 using Microsoft.AspNetCore.Builder; // WebApplication
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection; // Controllers
 using Microsoft.Extensions.Hosting; // IsDevelopment
 
@@ -11,6 +14,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 // Add a Swagger generator services to the Dependency Injection container. 
 builder.Services.AddSwaggerGen();
+// Configure the connection string. Check the system environment variables for BreadDatabase, else check the ConnectionString object for BreadDatabase in the appsettings.json file.
+string connectionString = Environment.GetEnvironmentVariable("BreadDatabase", EnvironmentVariableTarget.Machine) ?? builder.Configuration.GetConnectionString("BreadDatabase");
+// Configure DbContext to use PostgreSQL with the appropriate connection string.
+builder.Services.AddDbContext<BreadDbContext>(options => options.UseNpgsql(connectionString));
 
 // Builds WebApplication which includes all the services and configurations defined before this line. 'app' object represents your application and is used to configure the apps HTTP request pipeline.
 var app = builder.Build();
