@@ -10,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services required for using controllers.
 builder.Services.AddControllers();
+// Add services required for enabling CORS policies.
+builder.Services.AddCors();
 // Add services that allow the application to discover and describe its own API endpoints. Such as generating OpenAPI/Swagger documents.
 builder.Services.AddEndpointsApiExplorer();
 // Add a Swagger generator services to the Dependency Injection container. 
@@ -35,7 +37,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c => c.RoutePrefix = string.Empty);
 }
 
+// Configure CORS middleware.
+app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); // Will be adjusted to be more strict for production. This is temporary to avoid extra headaches during early development.
+// app.UseCors(options => options.WithOrigins("http://trustedorigins.com")) An example for what to change to later once the origins are determined.
+// Can also adjust what methods are allowed, for example GET, POST, PUT only, or any combination.
+// Can also specify which headers are manually set, for example, Accept, Content-Language, Content-Type, etc..
 // Configures the app to redirect HTTP requests to HTTPS (Secure).
+// See https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS for more CORS policy settings.
 app.UseHttpsRedirection();
 // Enables authorization. Determines what a user is allowed to do.
 app.UseAuthorization();
