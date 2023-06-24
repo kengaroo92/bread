@@ -12,14 +12,14 @@ public class TransactionController : ControllerBase
         _context = context;
     }
 
-    // GET: api/Transaction
+    // GET: /Transaction
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactions()
     {
         return await _context.Transactions.ToListAsync();
     }
 
-    // GET: api/Transaction/5
+    // GET: /Transaction/5
     [HttpGet("{id}")]
     public async Task<ActionResult<Transaction>> GetTransaction(int id)
     {
