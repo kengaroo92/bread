@@ -1,6 +1,23 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button, Container, TextField, Typography, Paper } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  marginTop: theme.spacing(8),
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+}));
+
+const StyledForm = styled('form')(({ theme }) => ({
+  width: '100%',
+  marginTop: theme.spacing(1),
+}));
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  margin: theme.spacing(3, 0, 2),
+}));
 const Login = () => {
   const navigate = useNavigate();
 
@@ -25,7 +42,7 @@ const Login = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-        credentials: 'include', // Allows cookies to be included in the request.
+        credentials: 'include',
       });
 
       if (response.ok) {
@@ -39,32 +56,51 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <h1>Please login to your account below.</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Username:
-          <input
-            type='text'
+    <Container
+      component='main'
+      maxWidth='xs'
+    >
+      <StyledPaper elevation={3}>
+        <Typography
+          component='h1'
+          variant='h5'
+        >
+          Please login to your account.
+        </Typography>
+        <StyledForm onSubmit={handleSubmit}>
+          <TextField
+            variant='outlined'
+            margin='normal'
+            required
+            fullWidth
+            label='Username'
             name='username'
             value={formData.username}
             onChange={handleChange}
-            required
+            autoFocus
           />
-        </label>
-        <label>
-          Password:
-          <input
-            type='password'
+          <TextField
+            variant='outlined'
+            margin='normal'
+            required
+            fullWidth
+            label='Password'
             name='password'
+            type='password'
             value={formData.password}
             onChange={handleChange}
-            required
           />
-        </label>
-        <button type='submit'>Login</button>
-      </form>
-    </div>
+          <StyledButton
+            type='submit'
+            fullWidth
+            variant='contained'
+            color='primary'
+          >
+            Login
+          </StyledButton>
+        </StyledForm>
+      </StyledPaper>
+    </Container>
   );
 };
 
