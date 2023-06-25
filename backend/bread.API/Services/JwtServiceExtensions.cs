@@ -6,6 +6,8 @@ using System.Text;
 
 public static class JwtServiceExtensions
 {
+  // https://stackoverflow.com/questions/72797587/asp-net-core-store-jwt-in-cookie
+  // https://weblog.west-wind.com/posts/2022/Mar/29/Combining-Bearer-Token-and-Cookie-Auth-in-ASPNET
   public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
   {
     // Generate secret key for JWT authentication.
