@@ -121,6 +121,60 @@ public class UserController : ControllerBase
     return Ok(new { User = user });
   }
 
+  // Route: /User/Account
+  // Method: GET
+  // Verify and retrieve the current users information.
+  [HttpGet]
+  [Route("account")]
+  public async Task<ActionResult<User>> GetAccountInformation()
+  {
+    // Extract the JWT from the cookies. The name of the cookie will always be authToken in this scenario.
+    if (!Request.Cookies.TryGetValue("authToken", out string tokenString))
+    {
+      return Unauthorized("Token Not Found");
+    }
+
+    try
+    {
+      // Decode and Verify. JwtSecurityTokenHandler provides methods for creating, validating, and processing JWT.
+      var tokenHandler = new JwtSecurityTokenHandler();
+      // 'key' is the secret used for signing the token. 
+      var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
+      // Read the token.
+      var token = tokenHandler.ReadJwtToken(tokenString);
+      // Set parameters for validation.
+      var validationParameters = new TokenValidationParameters
+      {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key), // Obtain the symmetric key that was used to encode the key, to now decode the key.
+        ValidateIssuer = false,
+        ValidateAudience = false
+      };
+
+      // Validate the JWT. Check if it's properly signed and hasn't been tampered with.
+      var principal = tokenHandler.ValidateToken(tokenString, validationParameters, out var validatedToken);
+
+      // Extract claims from the decoded and verified token.
+      var username = principal.Identity.Name; // Get the username from the claims.
+
+      // Retrieve the users information by querying the database using the given username.
+      var user = await _context.Users.Where(u => u.UserName == username).FirstOrDefaultAsync();
+
+      if (user == null)
+      {
+        return NotFound("User Information Not Found");
+      }
+
+      // Return the users information as an object.
+      return Ok(new { User = user });
+    }
+    catch (Exception ex)
+    {
+      // TODO: Log JWT Validation Exceptions.
+      return Unauthorized("Token validation has failed.");
+    }
+  }
+
   // Route: /User/{id}
   // Method: PUT
   // Update a specific user.

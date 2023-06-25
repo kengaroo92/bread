@@ -1,39 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import jwt_decode from 'jwt-decode'; // https://www.npmjs.com/package/jwt-decode
 
 const Account = () => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Function to get cookie.
-    const getCookie = (name) => {
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-      if (parts.length === 2) return parts.pop().split(';').shift();
-    };
-
-    // Retrieve the JWT from the cookie.
-    const token = getCookie('authToken');
-    console.log('Token retrieved from cookie: ', token);
-
-    // Decode the JWT.
-    if (token) {
-      const decodedToken = jwt_decode(token);
-      setUser(decodedToken);
-      console.log(decodedToken);
-    }
+    // Make a call to the account endpoint to get the users information if the JWT is validated successfully.
+    fetch('http://localhost:5020/user/account', { credentials: 'include' }) // Must include credentials so that the cookie is included in the call.
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Data received from the server: ', data); // Console log response for debugging.
+        setUser(data.user);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching user data: ', error);
+        setLoading(false);
+      });
   }, []);
 
   return (
     <div>
       <h1>User Account Information</h1>
-      {user ? (
-        <div>
-          <p>Name: {user.name}</p>
-          <p>Email: {user.email}</p>
-        </div>
-      ) : (
+      {loading ? (
         <p>Loading...</p>
+      ) : (
+        user && (
+          <div>
+            <p>Username: {user.userName}</p>
+            <p>Name: {user.fullName}</p>
+            <p>Email: {user.email}</p>
+          </div>
+        )
       )}
     </div>
   );
