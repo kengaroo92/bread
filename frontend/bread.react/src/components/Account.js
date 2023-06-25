@@ -1,14 +1,26 @@
 import React, { useEffect, useState } from 'react';
+import jwt_decode from 'jwt-decode'; // https://www.npmjs.com/package/jwt-decode
 
 const Account = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Load user data from local storage (or wherever it's stored) when the component mounts
-    const userData = localStorage.getItem('user');
+    // Function to get cookie.
+    const getCookie = (name) => {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    };
 
-    if (userData) {
-      setUser(JSON.parse(userData));
+    // Retrieve the JWT from the cookie.
+    const token = getCookie('authToken');
+    console.log('Token retrieved from cookie: ', token);
+
+    // Decode the JWT.
+    if (token) {
+      const decodedToken = jwt_decode(token);
+      setUser(decodedToken);
+      console.log(decodedToken);
     }
   }, []);
 
