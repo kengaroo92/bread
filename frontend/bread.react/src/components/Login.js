@@ -25,11 +25,13 @@ const Login = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
+        credentials: 'include', // Allows cookies to be included in the request.
       });
-      const data = await response.json();
 
       if (response.ok) {
         navigate('/account');
+      } else {
+        console.error('Failed to login.');
       }
     } catch (error) {
       console.error(error);
