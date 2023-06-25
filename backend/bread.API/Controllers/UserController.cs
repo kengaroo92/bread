@@ -1,5 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using Microsoft.Extensions.Options;
 
 // Declare that this is a controller for an API.
 [ApiController]
@@ -11,11 +17,13 @@ public class UserController : ControllerBase
 {
     // Variable to hold the database context.
     private readonly BreadDbContext _context;
+    private readonly JwtSettings _jwtSettings; // Declare JwtSettings.
 
     // Inject the database context into the controller with the constructor below.
-    public UserController(BreadDbContext context)
+    public UserController(BreadDbContext context, IOptions<JwtSettings> jwtSettings)
     {
         _context = context;
+        _jwtSettings = jwtSettings.Value;
     }
 
     // Route: /User
@@ -85,8 +93,25 @@ public class UserController : ControllerBase
       {
         return Unauthorized();
       }
+
+      // If a UserName was found and the passwords match, generate a JWT (JSON Web Token).
+      var tokenHandler = new JwtSecurityTokenHandler();
+      var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
+      var tokenDescriptor = new SecurityTokenDescriptor
+      {
+        Subject = new ClaimsIdentity(new[]
+        {
+            new Claim(ClaimTypes.Name, user.UserName.ToString()),
+        }),
+        Expires = DateTime.UtcNow.AddDays(7),
+        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+      };
+
+      var token = tokenHandler.CreateToken(tokenDescriptor);
+      var tokenString = tokenHandler.WriteToken(token);
+
       // If a UserName was found and the passwords match, return the user object, allowing the user to successfully login.
-      return user;
+      return Ok(new { User = user, Token = tokenString });
     }
 
     // Route: /User/{id}
