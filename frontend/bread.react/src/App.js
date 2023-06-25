@@ -3,11 +3,13 @@
 
 // Import the required components from the react-router-dom package.
 // BrowserRouter is a router implementation that uses HTML5 to keep your UI synced with the URL.
-// Router, Route, and Routes are components used to dfeine the routes of the application.
+// Router, Route, and Routes are components used to define the routes of the application.
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-// Provide UserContext
-import { UserContext } from './UserContext';
+// Provide Context
+import { AuthProvider } from './AuthContext';
+
 import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
 // Import component files. Each component represents a different page.
 import Home from './components/Home';
 import Registration from './components/Registration';
@@ -22,7 +24,7 @@ function App() {
   const [user, setUser] = useState(null);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <AuthProvider>
       {/* Wrap your application inside a Router component. Router listens to changes in the URL and renders the appropriate page (Route component). */}
       <Router>
         {/* Routes component is just a container to hold multiple Route components.*/}
@@ -52,7 +54,7 @@ function App() {
           />
         </Routes>
       </Router>
-    </UserContext.Provider>
+    </AuthProvider>
   );
 }
 // Export the App component so that it can be imported and used in other files.

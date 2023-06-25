@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import { UserContext } from '../UserContext';
+import { AuthContext } from '../AuthContext';
 
 const RegistrationSuccess = () => {
-  const { user } = useContext(UserContext);
+  const { user } = useContext(AuthContext);
 
   return (
     <div>
