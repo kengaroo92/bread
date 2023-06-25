@@ -1,3 +1,5 @@
+#nullable disable
+
 public class LoginRequest
 {
   public string UserName { get; set; }
