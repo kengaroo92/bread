@@ -18,30 +18,8 @@ builder.Services.AddControllers();
 builder.Services.AddCors();
 // Add services that allow the application to discover and describe its own API endpoints. Such as generating OpenAPI/Swagger documents.
 builder.Services.AddEndpointsApiExplorer();
-// Generate secret key for JWT authentication.
-var jwtSettingsSection = builder.Configuration.GetSection("JwtSettings");
-var jwtSettings = jwtSettingsSection.Get<JwtSettings>();
-builder.Services.Configure<JwtSettings>(jwtSettingsSection);
-// Generate the signing key.
-var key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
 // Add services for authentication to create a JWT (JSON Web Token) when a successful login request is received.
-builder.Services.AddAuthentication(x => 
-{   // Set default authentication scheme. When [Authorize] is used in the controllers, JWT bearer authentication will be used by default.
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; // When a user tries to access a resource they are not authorized to access, a JWT challenge will occur, typically returning a 401 Unauthorized HTTP response.
-}).AddJwtBearer(x => 
-{
-    x.RequireHttpsMetadata = false; // Set whether HTTPS is required or not.
-    x.SaveToken = true; // Set if the token should be stored in the AuthenticationProperties.
-    x.TokenValidationParameters = new TokenValidationParameters // Set parameters used to validate the token.
-    {
-        ValidateIssuerSigningKey = true, // Validate issuer signing key.
-        IssuerSigningKey = new SymmetricSecurityKey(key), // Set the signing key used for validation.
-        ValidateIssuer = false, // Set whether the issuer should be validated.
-        ValidateAudience = false, // Set whether the audiance should be validated.
-        ClockSkew = TimeSpan.Zero // Set a grace period on expiration, in this case, no grace period is set and tokens will expire exactly on their expiry date.
-    };
-});
+builder.Services.AddJwtAuthentication(builder.Configuration);
 // Add a Swagger generator services to the Dependency Injection container. 
 builder.Services.AddSwaggerGen();
 // Configure the connection string. Check the system environment variables for BreadDatabase, else check the ConnectionString object for BreadDatabase in the appsettings.json file.
@@ -59,14 +37,14 @@ var app = builder.Build();
 // Used to enable or disable certain features in certain environments.
 if (app.Environment.IsDevelopment())
 {
-    // Middleware that catches exceptions thrown by later middleware and generates HTML error responses.
-    app.UseDeveloperExceptionPage();
-    // OpenAPI documentation and testing. Describes endpoints, expected input/output for each endpoint, data models used, etc.
-    app.UseSwagger();
-    // Set up the interactive Swagger UI that can be accessed through the web browser. Setting RoutePrefix to an empty string allows Swagger UI to be accessed at the root. 'https://localhost:PORT/'
-    app.UseSwaggerUI(c => c.RoutePrefix = string.Empty);
-    // Use HTTP Strict Transport Security Protocol. https://learn.microsoft.com/en-us/aspnet/core/security/enforcing-ssl?view=aspnetcore-7.0&tabs=visual-studio%2Clinux-ubuntu
-    app.UseHsts();
+  // Middleware that catches exceptions thrown by later middleware and generates HTML error responses.
+  app.UseDeveloperExceptionPage();
+  // OpenAPI documentation and testing. Describes endpoints, expected input/output for each endpoint, data models used, etc.
+  app.UseSwagger();
+  // Set up the interactive Swagger UI that can be accessed through the web browser. Setting RoutePrefix to an empty string allows Swagger UI to be accessed at the root. 'https://localhost:PORT/'
+  app.UseSwaggerUI(c => c.RoutePrefix = string.Empty);
+  // Use HTTP Strict Transport Security Protocol. https://learn.microsoft.com/en-us/aspnet/core/security/enforcing-ssl?view=aspnetcore-7.0&tabs=visual-studio%2Clinux-ubuntu
+  app.UseHsts();
 }
 
 // Configure CORS middleware.
