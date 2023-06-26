@@ -214,6 +214,18 @@ public class UserController : ControllerBase
     return NoContent();
   }
 
+  // Route: /Logout : Not needed as user will press a 'Logout' button that will handle this request.
+  // Method: POST
+  // Deletes the JWT from the users cookie invalidating authentication, logging the user out.
+  [HttpPost]
+  [Route("logout")]
+  public IActionResult Logout()
+  {
+    Response.Cookies.Delete("authToken");
+
+    return Ok(new { message = "Successfully logged out." });
+  }
+
   // Route: /User/{id}
   // Method: DELETE
   // Delete a specific user.

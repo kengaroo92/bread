@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Container, TextField, Typography, Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { AuthContext } from '../AuthContext';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   marginTop: theme.spacing(8),
@@ -20,6 +21,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 }));
 const Login = () => {
   const navigate = useNavigate();
+  const { setIsLoggedIn } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     username: '',
@@ -47,6 +49,7 @@ const Login = () => {
 
       if (response.ok) {
         navigate('/account');
+        setIsLoggedIn(true);
       } else {
         console.error('Failed to login.');
       }
