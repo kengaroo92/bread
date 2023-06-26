@@ -53,8 +53,8 @@ if (app.Environment.IsDevelopment())
 // Can also specify which headers are manually set, for example, Accept, Content-Language, Content-Type, etc..
 // Configures the app to redirect HTTP requests to HTTPS (Secure).
 // See https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS for more CORS policy settings.
-// app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); // Will be adjusted to be more strict for production. This is temporary to avoid extra headaches during early development.
-app.UseCors(options => options.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+//app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); // Will be adjusted to be more strict for production. This is temporary to avoid extra headaches during early development.
+app.UseCors(options => options.WithOrigins("http://localhost:3000", "http://bread:3000").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
 // Create a lightweight health check to simply know if the app is running and responding. Navigate using /health.
 // If a more detailed health check is needed, navigate to /healthcheck which is the custom HealthCheckController that returns a detailed JSON object for both the app status and database status.
 app.MapHealthChecks("/health");

@@ -6,27 +6,27 @@
 // Router, Route, and Routes are components used to define the routes of the application.
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 // Provide Context
-import { AuthProvider } from './AuthContext';
+import { AuthProvider, AuthContext } from './AuthContext';
 
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useContext } from 'react';
 // Import component files. Each component represents a different page.
 import Home from './components/Home';
 import Registration from './components/Registration';
 import Login from './components/Login';
 import Account from './components/Account';
 import RegistrationSuccess from './components/RegistrationSuccess';
+import NavBar from './components/NavBar';
 // Import the CSS files to style the app.
 import './App.css';
 
 // Define the main 'App' component of the application.
 function App() {
-  const [user, setUser] = useState(null);
-
   return (
     <AuthProvider>
       {/* Wrap your application inside a Router component. Router listens to changes in the URL and renders the appropriate page (Route component). */}
       <Router>
+        {/* Conditionally render the NavBar if the user is logged in. */}
+        <MainContent />
         {/* Routes component is just a container to hold multiple Route components.*/}
         <Routes>
           {/* Each Route component represents a different page.
@@ -57,5 +57,11 @@ function App() {
     </AuthProvider>
   );
 }
+
+const MainContent = () => {
+  const { isLoggedIn } = useContext(AuthContext);
+  return <>{isLoggedIn && <NavBar />}</>;
+};
+
 // Export the App component so that it can be imported and used in other files.
 export default App;
