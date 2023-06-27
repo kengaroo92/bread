@@ -20,6 +20,7 @@ import Dashboard from './components/Dashboard';
 import Transactions from './components/Transactions';
 // Import the CSS files to style the app.
 import './App.css';
+import AddTransaction from './components/AddTransactions';
 
 // Define the main 'App' component of the application.
 function App() {
@@ -61,6 +62,10 @@ function App() {
           <Route
             path='/transactions'
             element={<Transactions />}
+          />
+          <Route
+            path='/addtransactions'
+            element={<AddTransaction />}
           />
         </Routes>
       </Router>

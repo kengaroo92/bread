@@ -75,13 +75,15 @@ const Transactions = () => {
           <Typography variant='subtitle1'>
             You don't have any transactions yet!
           </Typography>
-          <Button onClick={() => navigate('/add')}>
+          <Button onClick={() => navigate('/addtransactions')}>
             Start Adding Transactions!
           </Button>
         </div>
       ) : (
         <>
-          <Button onClick={() => navigate('/add')}>Add Transaction</Button>
+          <Button onClick={() => navigate('/addtransactions')}>
+            Add Transaction
+          </Button>
           {/* Show transactions in a table format. */}
           {/* TODO: Add Filtering, Pagination, Searching */}
           <TableContainer component={Paper}>
