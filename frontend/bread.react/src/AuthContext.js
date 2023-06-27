@@ -7,7 +7,7 @@ export const AuthProvider = ({ children }) => {
   // State Variable.
   const [user, setUser] = useState(null); // 'user' tracks user data, 'setUser' is the function used to update the data.
   const [loading, setLoading] = useState(true); // 'loading' tracks loading state, 'setLoading' is the function used to update the state.
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // 'isLoggedIn' tracks JWT authentication indicating a users login status.
 
   // useEffect hook runs the function when a component is mounted. In this case it fetches user data from the endpoint.
   useEffect(() => {
