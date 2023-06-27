@@ -58,6 +58,11 @@ const AddTransaction = () => {
     }
   };
 
+  // MaterialUI Useful Documentation
+  // TextField: https://mui.com/material-ui/api/text-field/
+  // OutlineInput: https://mui.com/material-ui/api/outlined-input/
+  // FormControl: https://mui.com/material-ui/api/form-control/
+  // RadioGroup: https://mui.com/material-ui/api/radio-group/
   return (
     <Container
       component={Paper}
