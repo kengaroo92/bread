@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { Button, Container, TextField, Typography, Paper } from '@mui/material';
+import {
+  Button,
+  Container,
+  TextField,
+  Typography,
+  Paper,
+  FormControl,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const AddTransaction = () => {
@@ -9,11 +19,44 @@ const AddTransaction = () => {
     description: '',
     amount: '',
     category: '',
+    type: 'income',
   });
 
-  const handleChange = (event) => {};
+  const handleChange = (event) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
+  };
 
-  const handleSubmit = async (event) => {};
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const payload = {
+        date: formData.date,
+        description: formData.description,
+        category: formData.category,
+        income: formData.type === 'income' ? formData.amount : 0,
+        expense: formData.type === 'expense' ? formData.amount : 0,
+      };
+
+      const response = await fetch('http://localhost:5020/transaction/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        console.error('Error response from server: ', errorResponse);
+        throw new Error('Failed to add transaction.');
+      }
+    } catch (error) {
+      console.error('Error adding transaction: ', error);
+    }
+  };
 
   return (
     <Container
@@ -35,7 +78,8 @@ const AddTransaction = () => {
           variant='outlined'
           value={formData.date}
           onChange={handleChange}
-          style={{ marginBottom: '1em' }}
+          style={{ marginBottom: '1em', backgroundColor: 'white' }}
+          InputLabelProps={{ shrink: true }} // Shrinks the label "Date" essentially always having it hover above the "mm/dd/yyyy" text.
         />
         <TextField
           fullWidth
@@ -56,6 +100,29 @@ const AddTransaction = () => {
           onChange={handleChange}
           style={{ marginBottom: '1em' }}
         />
+        <FormControl
+          component='fieldset'
+          style={{ marginBottom: '1em' }}
+        >
+          <RadioGroup
+            row
+            aria-label='type'
+            name='type'
+            value={formData.type}
+            onChange={handleChange}
+          >
+            <FormControlLabel
+              value='income'
+              control={<Radio />}
+              label='Income'
+            />
+            <FormControlLabel
+              value='expense'
+              control={<Radio />}
+              label='Expense'
+            />
+          </RadioGroup>
+        </FormControl>
         <TextField
           fullWidth
           label='Category'

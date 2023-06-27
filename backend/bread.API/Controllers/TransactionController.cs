@@ -42,7 +42,7 @@ public class TransactionController : ControllerBase
   // Method: POST
   // Add new transaction.
   [HttpPost]
-  [Route("/add")]
+  [Route("add")]
   public async Task<ActionResult<Transaction>> PostTransaction(Transaction transaction)
   {
     // Add the transaction to the DbContext.
