@@ -30,44 +30,46 @@ function App() {
       <Router>
         {/* Conditionally render the NavBar if the user is logged in. */}
         <MainContent />
-        {/* Routes component is just a container to hold multiple Route components.*/}
-        <Routes>
-          {/* Each Route component represents a different page.
+        <div className='content-padding'>
+          {/* Routes component is just a container to hold multiple Route components.*/}
+          <Routes>
+            {/* Each Route component represents a different page.
             The path prop defines the URL path.
             The element prop defines the actual component file that will be rendered.*/}
-          <Route
-            path='/'
-            element={<Home />}
-          />
-          <Route
-            path='/registration'
-            element={<Registration />}
-          />
-          <Route
-            path='/login'
-            element={<Login />}
-          />
-          <Route
-            path='/account'
-            element={<Account />}
-          />
-          <Route
-            path='/registrationsuccess'
-            element={<RegistrationSuccess />}
-          />
-          <Route
-            path='/dashboard'
-            element={<Dashboard />}
-          />
-          <Route
-            path='/transactions'
-            element={<Transactions />}
-          />
-          <Route
-            path='/addtransactions'
-            element={<AddTransaction />}
-          />
-        </Routes>
+            <Route
+              path='/'
+              element={<Home />}
+            />
+            <Route
+              path='/registration'
+              element={<Registration />}
+            />
+            <Route
+              path='/login'
+              element={<Login />}
+            />
+            <Route
+              path='/account'
+              element={<Account />}
+            />
+            <Route
+              path='/registrationsuccess'
+              element={<RegistrationSuccess />}
+            />
+            <Route
+              path='/dashboard'
+              element={<Dashboard />}
+            />
+            <Route
+              path='/transactions'
+              element={<Transactions />}
+            />
+            <Route
+              path='/addtransactions'
+              element={<AddTransaction />}
+            />
+          </Routes>
+        </div>
       </Router>
     </AuthProvider>
   );
