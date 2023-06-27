@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
 import { AppBar, Toolbar, Typography, Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../AuthContext';
 
 const NavBar = () => {
-  const navigate = useNavigate();
-  const { setIsLoggedIn } = useContext(AuthContext);
+  const navigate = useNavigate(); // React hook that allows navigation to other pages.
+  const { setIsLoggedIn } = useContext(AuthContext); // Access AuthContext to update setLoggedIn state.
 
+  // Logout function.
   const handleLogout = async () => {
     try {
       const response = await fetch('http://localhost:5020/user/logout', {
@@ -15,10 +16,11 @@ const NavBar = () => {
       });
 
       if (response.ok) {
+        // Clear the JWT if the response is Ok from the backend.
         document.cookie =
-          'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        setIsLoggedIn(false);
-        navigate('/login');
+          'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'; // Set token to empty string expiry date to a previous date to ensure the token is cleared from the cookie.
+        setIsLoggedIn(false); // Set isLoggedIn to false, this clears the NavBar status.
+        navigate('/login'); // Navigate to /login.
       } else {
         console.error('Failed to logout.');
       }
@@ -34,8 +36,34 @@ const NavBar = () => {
           variant='h6'
           style={{ flexGrow: 1 }}
         >
-          Finance Manager App
+          <Link
+            to='/'
+            style={{ textDecoration: 'none', color: 'inherit' }}
+          >
+            Finance Manager App
+          </Link>
         </Typography>
+        <Button
+          color='inherit'
+          component={Link}
+          to='/dashboard'
+        >
+          Dashboard
+        </Button>
+        <Button
+          color='inherit'
+          component={Link}
+          to='/transactions'
+        >
+          Transactions
+        </Button>
+        <Button
+          color='inherit'
+          component={Link}
+          to='/account'
+        >
+          Account
+        </Button>
         <Button
           color='inherit'
           onClick={handleLogout}

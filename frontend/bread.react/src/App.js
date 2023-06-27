@@ -16,6 +16,8 @@ import Login from './components/Login';
 import Account from './components/Account';
 import RegistrationSuccess from './components/RegistrationSuccess';
 import NavBar from './components/NavBar';
+import Dashboard from './components/Dashboard';
+import Transactions from './components/Transactions';
 // Import the CSS files to style the app.
 import './App.css';
 
@@ -52,12 +54,23 @@ function App() {
             path='/registrationsuccess'
             element={<RegistrationSuccess />}
           />
+          <Route
+            path='/dashboard'
+            element={<Dashboard />}
+          />
+          <Route
+            path='/transactions'
+            element={<Transactions />}
+          />
         </Routes>
       </Router>
     </AuthProvider>
   );
 }
 
+// MainContent is responsible for condiotionally rendering the NavBar component.
+// It will check the isLoggedIn state determining users login status.
+// If the state is true, the NavBar will be rendered on all pages, if false, the NavBar won't be shown anywhere.
 const MainContent = () => {
   const { isLoggedIn } = useContext(AuthContext);
   return <>{isLoggedIn && <NavBar />}</>;
