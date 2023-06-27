@@ -15,7 +15,7 @@ public class TransactionController : ControllerBase
   // Method: GET
   // Get all transactions.
   [HttpGet]
-  [Route("transactions")]
+  [Route("all")]
   public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactions()
   {
     return await _context.Transactions.ToListAsync();

@@ -18,7 +18,7 @@ import { AuthContext } from '../AuthContext';
 const Transactions = () => {
   const navigate = useNavigate();
   const { setIsLoggedIn } = useContext(AuthContext);
-  const [transactions, setTransactions] = useState();
+  const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -26,7 +26,7 @@ const Transactions = () => {
     // Fetches all transactions when the component is mounted.
     const fetchTransactions = async () => {
       try {
-        const response = await fetch('http://localhost:5020/transactions', {
+        const response = await fetch('http://localhost:5020/transaction/all', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -70,40 +70,53 @@ const Transactions = () => {
   return (
     <Container component={Paper}>
       <Typography variant='h4'>Your Transactions</Typography>
-      <Button onClick={() => navigate('/add')}>Add Transaction</Button>
-      {/* Show transactions in a table format. */}
-      {/* TODO: Add Filtering, Pagination, Searching */}
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Date</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell>Amount</TableCell>
-              <TableCell>Category</TableCell>
-              <TableCell>Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {transactions.map((transactions) => (
-              <TableRow key={transactions.id}>
-                <TableCell>{transactions.date}</TableCell>
-                <TableCell>{transactions.description}</TableCell>
-                <TableCell>{transactions.amount}</TableCell>
-                <TableCell>{transactions.category}</TableCell>
-                <TableCell>
-                  <Button onClick={() => handleEdit(transactions.id)}>
-                    Edit
-                  </Button>
-                  <Button onClick={() => handleDelete(transactions.id)}>
-                    Delete
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      {transactions.length === 0 ? (
+        <div>
+          <Typography variant='subtitle1'>
+            You don't have any transactions yet!
+          </Typography>
+          <Button onClick={() => navigate('/add')}>
+            Start Adding Transactions!
+          </Button>
+        </div>
+      ) : (
+        <>
+          <Button onClick={() => navigate('/add')}>Add Transaction</Button>
+          {/* Show transactions in a table format. */}
+          {/* TODO: Add Filtering, Pagination, Searching */}
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Date</TableCell>
+                  <TableCell>Description</TableCell>
+                  <TableCell>Amount</TableCell>
+                  <TableCell>Category</TableCell>
+                  <TableCell>Action</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {transactions.map((transaction) => (
+                  <TableRow key={transaction.id}>
+                    <TableCell>{transaction.date}</TableCell>
+                    <TableCell>{transaction.description}</TableCell>
+                    <TableCell>{transaction.amount}</TableCell>
+                    <TableCell>{transaction.category}</TableCell>
+                    <TableCell>
+                      <Button onClick={() => handleEdit(transaction.id)}>
+                        Edit
+                      </Button>
+                      <Button onClick={() => handleDelete(transaction.id)}>
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </>
+      )}
     </Container>
   );
 };
